@@ -8,8 +8,16 @@ const AdminDashboard = () =>{
     const [data, setData] = useState([]);
 
     useEffect(() =>{
-        setData(getRestaurants());
-    }, []);
+        window.addEventListener("focus", () =>{
+            setData(JSON.parse(localStorage.getItem("evaData"))
+        || []);
+    })
+}, [])
+
+
+    // useEffect(() =>{
+    //     setData(getRestaurants());
+    // }, []);
 
     const handleDelete = (id) =>{
         if(!window.confirm("Are you sure you want to delete?")) return;
