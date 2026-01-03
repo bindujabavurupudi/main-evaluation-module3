@@ -1,37 +1,53 @@
-import { useState, useMemo, useCallback } from "react";
-import ProductList from "./ProductList";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./Login"
+import AdminDashboard from "./AdminDashboard";
+import CustomerDashboard from "./CustomerDashboard";
+import AddRestaurant from "./AddRestaurant";
+import UpdateRestaurant from "./UpdateRestaurant";
+import ProtectedRoute from "./ProtectedRoute";
 
-function App() {
-  const [count, setCount] = useState(0);
-
-  const products = [
-    { id: 1, name: "Laptop", price: 50000 },
-    { id: 2, name: "Phone", price: 20000 },
-    { id: 3, name: "Tablet", price: 30000 },
-  ];
-
-  const totalPrice = useMemo(() => {
-    console.log("Calculating total price...");
-    return products.reduce((sum, item) => sum + item.price, 0);
-  }, [products]);
-
-  const handleSelectProduct = useCallback((product) => {
-    console.log("Selected:", product.name);
-  }, []);
-
+function App(){
   return (
-    <div>
-      <h2>Total Price: ₹{totalPrice}</h2>
+    <BrowserRouter>
+    <Routes>
+      <Route path = "/" element = {<Login />} />
+      <Route path = "/admin/dashboard" 
+      element = 
+      {<ProtectedRoute role = "admin">
+        <AdminDashboard />
+      </ProtectedRoute>
 
-      <button onClick={() => setCount(count + 1)}>
-        Counter: {count}
-      </button>
+      }
+       />
 
-      <ProductList
-        products={products}
-        onSelectProduct={handleSelectProduct}
-      />
-    </div>
+      <Route path = "/customers/dashboard" 
+      element = 
+      {<ProtectedRoute role = "customer">
+        <CustomerDashboard />
+      </ProtectedRoute>
+
+      }
+       />
+
+      <Route path = "/admin/restaurants/add" 
+      element = 
+      {<ProtectedRoute role = "admin">
+        <AddRestaurant />
+      </ProtectedRoute>
+
+      }
+       />
+
+      <Route path = "/admin/restaurants/update/:id" 
+      element = 
+      {<ProtectedRoute role = "admin">
+        <UpdateRestaurant />
+      </ProtectedRoute>
+
+      }
+       />
+    </Routes>
+    </BrowserRouter>
   );
 }
 
